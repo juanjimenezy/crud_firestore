@@ -56,23 +56,6 @@ function App() {
 
   return (
     <>
-      {/* <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <h1 className="text-center">{modoEdicion ? 'Edicion de usuario' : 'Registro de usuarios.'}</h1>
-
-            <form onSubmit={modoEdicion ? editarElemento : guardarDato}>
-              <input type="text" placeholder="Nombre" name="nombre" id="nombre" className="form-control" onChange={handleChange} value={registro.nombre} pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required />
-              <input type="text" placeholder="Apellido" name="apellido" id="apellido" className="form-control" onChange={handleChange} value={registro.apellido} pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required />
-              {
-                modoEdicion ? <input type="submit" value="Editar" /> :
-                  <input type="submit" value="Registrar" />
-              }
-            </form>
-          </div>
-        </div>
-      </div>  */}
-
       <div className="my-4 justify-content-center d-flex align-items-center">
         <Card className="col-md-2 shadow-lg">
           <CardHeader className="text-center bg-dark text-light">Insertar Registro</CardHeader>
