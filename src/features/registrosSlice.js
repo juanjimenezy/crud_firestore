@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { db } from "../firebase/config";
 
-const initialState = [];
+let initialState = []
 
 const registrosSlice = createSlice({
   name: 'registros',
@@ -33,9 +33,13 @@ const registrosSlice = createSlice({
         state.splice(state.indexOf(foundRegistro), 1);
       }
     },
+    cargarRegistros: (state, action) => {
+      const registro = action.payload;
+      console.log(registro);
+    }
   }
 })
 
 
-export const { addRegistro, editRegistro, deleteRegistro } = registrosSlice.actions;
+export const { addRegistro, editRegistro, deleteRegistro,cargarRegistros } = registrosSlice.actions;
 export default registrosSlice.reducer

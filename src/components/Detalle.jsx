@@ -1,7 +1,7 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Table, Button, Modal, ModalHeader, ModalBody, FormGroup,ModalFooter } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { editRegistro,deleteRegistro } from "../features/registrosSlice";
 import { db } from "../firebase/config";
 
@@ -9,20 +9,21 @@ import { db } from "../firebase/config";
 
 
 function Detalle() {
-    const registros = useSelector((state) => state.registros);
+    //const registros = useSelector((state) => state.registros);
     const [registro, setRegistro] = React.useState({id: "", nombre: "", apellido: ""});
     const [actualizar, setActualizar] = React.useState(false);
     const dispatch = useDispatch();
-    const [lista, setLista] = React.useState([]);
+    const [registros, setRegistros] = React.useState([]);
 
     React.useEffect(() => {
         const obtenerDatos = async () => {
           try {
             const data = await db.collection('usuarios').get();
             //console.log(data.docs)
-            const arrayData = data.docs.map((documento) => ({ ...documento.data().registro }))
-            console.log(arrayData)
-            setLista(arrayData)
+            const arrayData = data.docs.map((documento) => ({id: documento.id, ...documento.data().registro }));
+            //console.log(arrayData);
+            setRegistros(arrayData);
+
           } catch (err) {
             console.log(err);
           }
@@ -90,7 +91,7 @@ function Detalle() {
                             </thead>
 
                             <tbody>
-                                {lista.map((dato, key) => (
+                                {registros.map((dato, key) => (
                                     <tr key={key}>
                                         {/* <td>{dato.id}</td> */}
                                         <td>{dato.nombre}</td>
