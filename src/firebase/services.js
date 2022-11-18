@@ -21,9 +21,10 @@
     }
   };
 
-  export const guardarDatos = async (usuario) => {
+  export const guardarDatos = async (registro) => {
+    const newUser = {nombre: registro.nombre, apellido: registro.apellido};
     try {
-      const dato = await db.collection(collectionName).add(usuario);
+      const dato = await db.collection(collectionName).add(newUser);
       return dato;
     } catch (error) {
       console.log(error);
