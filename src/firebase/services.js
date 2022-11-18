@@ -4,9 +4,13 @@
 
   export const obtenerDatos = async () => {
     try {
-        const data = await db.collection(collectionName).get();
+        let dato = await db.collection(collectionName).get();
+        dato = await db.collection(collectionName).get();
         const docs = [];
-        data.forEach((doc) => {docs.push({...doc.data(), id: doc.id})});
+        dato.forEach((doc) => {
+          docs.push({...doc.data(), id: doc.id});
+          console.log(doc.data());
+        });
         return docs;
     } catch (err) {
       console.log(err);
@@ -33,7 +37,7 @@
 
   export const editarDato = async (registro) => {
     try {
-      await db.collection(collectionName).doc(registro.id).update({ nombre: registro.nombre, apellido: registro.apellido });
+      await db.collection(collectionName).doc(registro.id).update({nombre: registro.nombre, apellido: registro.apellido });
     } catch (error) {
       console.log(error);
     }
