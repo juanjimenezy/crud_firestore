@@ -1,6 +1,5 @@
 import React from 'react';
-import { db } from "./firebase/config";
-import { obtenerDatos, eliminarDatos,guardarDatos } from './firebase/services';
+import { obtenerDatos, eliminarDatos,guardarDatos,editarDato } from './firebase/services';
 
 function App() {
 
@@ -8,7 +7,6 @@ function App() {
   const [registro, setRegistro] = React.useState({ id: "", nombre: "", apellido: "" });
 
   const [modoEdicion, setModoEdicion] = React.useState(false)
-  const [error, setError] = React.useState('')
 
   React.useEffect(() => {
     getDatos();
@@ -26,70 +24,36 @@ function App() {
   };
 
   const handleChange = (e) => {
-    setRegistro({
-      ...registro,
-      [e.target.name]: e.target.value,
-    });
+    setRegistro({...registro,[e.target.name]: e.target.value,});
   };
 
   const editar = async (element) => {
     setModoEdicion(true);
     setRegistro({ id: element.id, nombre: element.nombre, apellido: element.apellido });
-    console.log(registro);
   };
 
 
   const guardarDato = async (e) => {
     e.preventDefault();
-    if (!registro.nombre.trim()) {
-      alert('No se encuentran valores para el campo nombre');
-      return;
-    }
-
-    if (!registro.apellido.trim()) {
-      alert('No se encuentran valores para el campo apellido');
-      return;
-    }
-
-    try {
-      const nuevoUsuario = { nombre: registro.nombre, apellido: registro.apellido };
-      const dato = await guardarDatos(nuevoUsuario);
-      setLista([...lista,{ id: dato.id, ...nuevoUsuario }]);
-    } catch (error) {
-      console.log(error);
-    }
-    setRegistro({ id: "", nombre: "", apellido: "" });
+    const nuevoUsuario = { nombre: registro.nombre, apellido: registro.apellido };
+    const dato = await guardarDatos(nuevoUsuario);
+    setLista([...lista,{ id: dato.id, ...nuevoUsuario }]);
+    limpiar();
   };
 
   const editarElemento = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    editarDato(registro);
+    getDatos();
 
-    if (!registro.nombre.trim()) {
-      alert('No se encuentran valores para el campo nombre');
-      return;
-    }
-    
-    if (!registro.apellido.trim()) {
-      alert('No se encuentran valores para el campo apellido');
-      return;
-    }
+    setModoEdicion(false)
+    limpiar();
 
-    try {
-      await db.collection('usuarios').doc(registro.id).update({ nombre: registro.nombre, apellido: registro.apellido })
-      const listaEditada = lista.map(
-        (elemento) => elemento.id === registro.id ?
-          { id: registro.id, nombre: registro.nombre, apellido: registro.apellido } : elemento
-      )
-      setLista(listaEditada)
-      setModoEdicion(false)
-      setRegistro({ id: "", nombre: "", apellido: "" });
-      setError(null)
-    } catch (error) {
-      console.log(error);
-    }
   };
 
-
+  const limpiar = () => {
+    setRegistro({ id: "", nombre: "", apellido: "" });
+  }
   
   return (
     <>
@@ -97,14 +61,10 @@ function App() {
         <div className="row">
           <div className="col-12">
             <h1 className="text-center">{modoEdicion ? 'Edicion de usuario' : 'Registro de usuarios.'}</h1>
-            {
-              error ? (alert({ error })) : null
-
-            }
 
             <form onSubmit={modoEdicion ? editarElemento : guardarDato}>
-              <input type="text" placeholder="Nombre" name="nombre" id="nombre" className="form-control" onChange={handleChange} value={registro.nombre} />
-              <input type="text" placeholder="Apellido" name="apellido" id="apellido" className="form-control" onChange={handleChange} value={registro.apellido} />
+              <input type="text" placeholder="Nombre" name="nombre" id="nombre" className="form-control" onChange={handleChange} value={registro.nombre} pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required/>
+              <input type="text" placeholder="Apellido" name="apellido" id="apellido" className="form-control" onChange={handleChange} value={registro.apellido} pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required/>
               {
                 modoEdicion ? <input type="submit" value="Editar" /> :
                   <input type="submit" value="Registrar" />
